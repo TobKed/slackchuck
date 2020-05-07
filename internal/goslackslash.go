@@ -49,10 +49,16 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 		if text != "" && text != "list" && !IsValidCategory(text) {
 			response := fmt.Sprintf("Unknown command. List categories with 'list' option. List of available categories: %v", strings.Join(categories, ", "))
-			w.Write([]byte(response))
+			_, err = w.Write([]byte(response))
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else if text == "list" {
 			response := fmt.Sprintf("Available categories: %v", strings.Join(categories, ", "))
-			w.Write([]byte(response))
+			_, err = w.Write([]byte(response))
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else {
 
 			buf := bytes.Buffer{}
@@ -86,7 +92,10 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				response := fmt.Sprintf("%v", apiResponse.Value)
-				w.Write([]byte(response))
+				_, err = w.Write([]byte(response))
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 
