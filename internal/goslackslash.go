@@ -1,4 +1,4 @@
-// Package contains an HTTP function that replies for slack slash command.
+// Package internal contains an HTTP function that replies for slack slash command.
 package internal
 
 import (
@@ -15,16 +15,17 @@ import (
 
 var categories = []string{"animal", "career", "celebrity", "dev", "explicit", "fashion", "food", "history", "money", "movie", "music", "political", "religion", "science", "sport", "travel"}
 
-type APIResponse struct {
+type slackAPIRequest struct {
 	Categories []string `json:"categories"`
 	CreatedAt  string   `json:"created_at"`
-	IconUrl    string   `json:"icon_url"`
-	Id         string   `json:"id"`
+	IconURL    string   `json:"icon_url"`
+	ID         string   `json:"id"`
 	UpdatedAt  string   `json:"updated_at"`
-	Url        string   `json:"url"`
+	URL        string   `json:"url"`
 	Value      string   `json:"value"`
 }
 
+// SlashCommandHandler andles request from Slack
 func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 	s, err := slack.SlashCommandParse(r)
@@ -47,7 +48,7 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 		params := &slack.Msg{Text: s.Text}
 		text := params.Text
 
-		if text != "" && text != "list" && !IsValidCategory(text) {
+		if text != "" && text != "list" && !isValidCategory(text) {
 			response := fmt.Sprintf("Unknown command. List categories with 'list' option. List of available categories: %v", strings.Join(categories, ", "))
 			_, err = w.Write([]byte(response))
 			if err != nil {
@@ -63,7 +64,7 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 			buf := bytes.Buffer{}
 			buf.WriteString("https://api.chucknorris.io/jokes/random")
-			if IsValidCategory(text) {
+			if isValidCategory(text) {
 				buf.WriteString("?category=")
 				buf.WriteString(text)
 			}
@@ -84,7 +85,7 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 			defer resp.Body.Close()
 
 			if resp.StatusCode == http.StatusOK {
-				apiResponse := &APIResponse{}
+				apiResponse := &slackAPIRequest{}
 
 				err = json.NewDecoder(resp.Body).Decode(&apiResponse)
 				if err != nil {
@@ -106,7 +107,7 @@ func SlashCommandHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func IsValidCategory(category string) bool {
+func isValidCategory(category string) bool {
 	for _, existingsCcategory := range categories {
 		if existingsCcategory == category {
 			return true
