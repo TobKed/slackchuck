@@ -1,5 +1,5 @@
-// Package internal contains an HTTP function that replies for slack slash command.
-package internal
+// Package slackchuck contains an HTTP function that replies for slack slash command.
+package slackchuck
 
 import (
 	"bytes"
