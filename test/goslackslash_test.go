@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TobKed/slackchuck/internal"
+	"github.com/TobKed/slackchuck"
 )
 
 func TestSlashCommandHandlerFaileAutorization(t *testing.T) {
 	rr := httptest.NewRecorder()
 	req := httptest.NewRequest("GET", "/", nil)
-	internal.SlashCommandHandler(rr, req)
+	slackchuck.SlashCommandHandler(rr, req)
 	if rr.Result().StatusCode != http.StatusUnauthorized {
 		t.Errorf("Gopher StatusCode = %v, want %v", rr.Result().StatusCode, http.StatusUnauthorized)
 	}
@@ -28,7 +28,7 @@ func TestSlashCommandHandler(t *testing.T) {
 	rr := httptest.NewRecorder()
 	req := httptest.NewRequest("POST", "/", strings.NewReader(data.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	internal.SlashCommandHandler(rr, req)
+	slackchuck.SlashCommandHandler(rr, req)
 	if rr.Result().StatusCode != http.StatusOK {
 		t.Errorf("Gopher StatusCode = %v, want %v", rr.Result().StatusCode, http.StatusOK)
 	}

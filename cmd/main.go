@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/TobKed/slackchuck/internal"
+	"github.com/TobKed/slackchuck"
 )
 
 func main() {
-	http.HandleFunc("/", internal.SlashCommandHandler)
+	http.HandleFunc("/", slackchuck.SlashCommandHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
