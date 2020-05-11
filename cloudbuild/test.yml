@@ -1,0 +1,29 @@
+steps:
+- id: 'tf init'
+  name: 'hashicorp/terraform:0.12.24'
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+      cd terraform
+      echo ""
+      echo "*************** TERRAFORM INIT ******************"
+      echo "******* Branch: $BRANCH_NAME ********"
+      echo "*************************************************"
+      terraform init "-backend-config=bucket=$PROJECT_ID-tfstate" || exit 1
+      cd ../
+
+
+- id: 'tf plan'
+  name: 'hashicorp/terraform:0.12.24'
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+      cd terraform
+      echo ""
+      echo "*************** TERRAFORM PLAN ******************"
+      echo "******* Branch: $BRANCH_NAME ********"
+      echo "*************************************************"
+      terraform plan -var "project_id=$PROJECT_ID"  || exit 1
+      cd ../
