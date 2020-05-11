@@ -37,6 +37,8 @@ enable_project_api "${PROJECT_ID}" cloudfunctions.googleapis.com
 enable_project_api "${PROJECT_ID}" storage-api.googleapis.com
 enable_project_api "${PROJECT_ID}" storage-component.googleapis.com
 enable_project_api "${PROJECT_ID}" cloudbuild.googleapis.com
+enable_project_api "${PROJECT_ID}" secretmanager.googleapis.com
+enable_project_api "${PROJECT_ID}" cloudkms.googleapis.com
 
 
 get_terraform_backend_bucket
