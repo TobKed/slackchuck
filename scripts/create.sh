@@ -14,7 +14,7 @@ run_terraform() {
   cd "$ROOT/terraform" && terraform apply \
     -var "project_id=${PROJECT_ID}" \
     -var "slack_verification_token=${SLACK_VERIFICATION_TOKEN}"
-    -input=false \
+    # -input=false \
     # -auto-approve \
 }
 
