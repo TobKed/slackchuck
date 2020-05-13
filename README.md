@@ -14,3 +14,11 @@ Made for fun, to learn GO, practice GCP and Terraform.
 - [SLACKCHACK](#slackchack)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+![animation](docs/animation.gif)
+
+
+![architecture](docs/arch1.png)
+
+
+![architecture](docs/arch2.png)
