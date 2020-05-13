@@ -17,4 +17,8 @@ Made for fun, to learn GO, practice GCP and Terraform.
 
 ![animation](docs/animation.gif)
 
-![architecture](docs/architecture.png)
+
+![architecture](docs/arch1.png)
+
+
+![architecture](docs/arch2.png)
