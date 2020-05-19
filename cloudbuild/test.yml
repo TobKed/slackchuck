@@ -1,29 +1,18 @@
 steps:
-- id: 'tf init'
-  name: 'hashicorp/terraform:0.12.24'
-  entrypoint: 'sh'
-  args:
-  - '-c'
-  - |
-      cd terraform
-      echo ""
-      echo "*************** TERRAFORM INIT ******************"
-      echo "******* Branch: $BRANCH_NAME ********"
-      echo "*************************************************"
-      terraform init "-backend-config=bucket=$PROJECT_ID-tfstate" || exit 1
-      cd ../
 
+- id: 'get secrets'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: [ '-c', 'gcloud secrets versions access latest --secret=slack-token > /workspace/token.txt' ]
+
+- id: 'tf init'
+  name: hashicorp/terraform:0.12.24
+  entrypoint: terraform
+  dir: terraform
+  args: ['init', '-backend-config=bucket=${PROJECT_ID}-tfstate']
 
 - id: 'tf plan'
-  name: 'hashicorp/terraform:0.12.24'
-  entrypoint: 'sh'
-  args:
-  - '-c'
-  - |
-      cd terraform
-      echo ""
-      echo "*************** TERRAFORM PLAN ******************"
-      echo "******* Branch: $BRANCH_NAME ********"
-      echo "*************************************************"
-      terraform plan -var "project_id=$PROJECT_ID"  || exit 1
-      cd ../
+  name: hashicorp/terraform:0.12.24
+  entrypoint: sh
+  dir: terraform
+  args: ['-c', 'terraform plan  -var project_id=${PROJECT_ID} -var slack_verification_token=$(cat /workspace/token.txt)']
