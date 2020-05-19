@@ -1,4 +1,11 @@
 steps:
+
+- id: 'get secrets'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: [ '-c', 'gcloud secrets versions access latest --secret=slack-token > /workspace/token.txt' ]
+
+
 - id: 'tf init'
   name: 'hashicorp/terraform:0.12.24'
   entrypoint: 'sh'
@@ -25,11 +32,4 @@ steps:
       echo "*************** TERRAFORM APPLY *****************"
       echo "******* Branch: $BRANCH_NAME ********"
       echo "*************************************************"
-      terraform apply -var "project_id=$PROJECT_ID" -var "slack_verification_token=$$SLACK_VERIFICATION_TOKEN" -auto-approve
-  secretEnv: ['SLACK_VERIFICATION_TOKEN']
-
-
-secrets:
-- kmsKeyName: projects/test-slack-chuck/locations/global/keyRings/slackchuck-token-keyring/cryptoKeys/slack-token
-  secretEnv:
-    SLACK_VERIFICATION_TOKEN: 'CiQAKjK5e4QFu9vs/rN89eEuj54jjitAis8s3YKeOKilf/XXd1ASQQCGuvbQoENOS3xjDCA0NVt1p1wiPI/pewEO4elLwboglnbbFbuMYvwXbpkGboHT1nYJxQEIrM28RbjAMkaZGQSk'
+      terraform apply -var "project_id=$PROJECT_ID" -var "slack_verification_token=$(cat /workspace/token.txt)" -auto-approve
