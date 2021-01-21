@@ -17,6 +17,10 @@ jobs:
         run: |
           go get -u golang.org/x/lint/golint
           export PATH=$PATH:$(go list -f {{.Target}} golang.org/x/lint/golint)
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Terraform Init
+        run: cd terraform && terraform init
       - name: Run pre-commit
         uses: pre-commit/action@v1.0.1
 

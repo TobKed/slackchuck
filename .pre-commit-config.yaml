@@ -24,4 +24,4 @@ repos:
   rev: v1.30.0
   hooks:
     - id: terraform_fmt
-    # - id: terraform_docs
+    - id: terraform_validate
